@@ -130,12 +130,12 @@ const routes = [
   { path: "/auth", router: authRoutes },
 
   // Core Routes
-  { path: "/", router: healthRoutes }, // /api/health
-  { path: "/", router: profileRoutes }, // /api/profile
-  { path: "/", router: emailRoutes }, // /api/contact
+  { path: "/", router: healthRoutes, name: "health" }, // /api/health
+  { path: "/", router: profileRoutes, name: "profile" }, // /api/profile
+  { path: "/", router: emailRoutes, name: "email" }, // /api/contact
 
   // Portfolio Data Routes
-  { path: "/personal-info", router: personalInfoRoutes },
+  { path: "/personal-info", router: personalInfoRoutes, name: "personal-info" },
   { path: "/skills", router: skillsRoutes },
   { path: "/certifications", router: certificationsRoutes },
   { path: "/services", router: servicesRoutes },
@@ -153,9 +153,9 @@ const routes = [
 
 // Register all routes under /api prefix
 const apiRouter = express.Router();
-routes.forEach(({ path, router }) => {
+routes.forEach(({ path, router, name }) => {
   apiRouter.use(path, router);
-  console.log(`✓ Registered route: /api${path}`);
+  console.log(`✓ Registered route: /api${name ? `/${name}` : path}`);
 });
 
 const API_PREFIX = process.env.API_PREFIX;
