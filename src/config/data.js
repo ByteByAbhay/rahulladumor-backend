@@ -1,8 +1,10 @@
 const personalInfo = {
   // Basic Information
   name: "Rahul Ladumor",
-  title: "4x AWS Community Builder (Serverless) | Serverless Expert | LLM | AI ML",
-  tagline: "30-70% Cost Reduction Specialist | DevOps & CI/CD Automation | Helping Enterprises Scale with Lambda & Kubernetes",
+  title:
+    "4x AWS Community Builder (Serverless) | Serverless Expert | LLM | AI ML",
+  tagline:
+    "30-70% Cost Reduction Specialist | DevOps & CI/CD Automation | Helping Enterprises Scale with Lambda & Kubernetes",
   location: "Surat, Gujarat, India",
   timezone: "GMT+5:30",
   image: "/assets/images/profile.avif",
@@ -12,6 +14,11 @@ const personalInfo = {
   phone: "+91-9586661233",
   website: "https://www.rahulladumor.in",
 
+  mainHeading: `<h1 class="text-3xl md:text-3xl lg:text-4xl font-bold leading-tight tracking-tight">
+                I'll Cut Your AWS Bill by
+                <span class="text-accent">60%</span>
+                <span class="text-white">(Guaranteed)</span>
+              </h1>`,
   // Social Media
   social: {
     linkedin: "https://linkedin.com/in/rahulladumor",
@@ -98,7 +105,6 @@ const personalInfo = {
 
   // Certifications
   certifications: [
-    
     {
       name: "AWS Certified Developer - Associate",
       issuer: "Amazon Web Services",
@@ -1385,21 +1391,24 @@ const personalInfo = {
         views: "5K+",
       },
       {
-        title: "DeepSeek R1 AI: Game-Changer or Regionally Limited? 2025 Analysis",
+        title:
+          "DeepSeek R1 AI: Game-Changer or Regionally Limited? 2025 Analysis",
         platform: "Dev.to",
         date: "2025",
         url: "https://dev.to/rahulladumor/deepseek-r1-a-game-changer-or-a-regionally-constrained-ai-3iaj",
         views: "3K+",
       },
       {
-        title: "Mastering AWS Lambda Performance: Advanced Optimization Strategies for 2025",
+        title:
+          "Mastering AWS Lambda Performance: Advanced Optimization Strategies for 2025",
         platform: "Dev.to",
         date: "2025",
         url: "https://dev.to/rahulladumor/mastering-aws-lambda-performance-advanced-optimization-strategies-for-2025-3bfe",
         views: "8K+",
       },
       {
-        title: "Working with Amazon OpenSearch Service Direct Queries with Amazon S3",
+        title:
+          "Working with Amazon OpenSearch Service Direct Queries with Amazon S3",
         platform: "Dev.to",
         date: "2024",
         url: "https://dev.to/rahulladumor/working-with-amazon-opensearch-service-direct-queries-with-amazon-s3-the-first-ever-detailed-guide-4m2a",
@@ -1420,14 +1429,16 @@ const personalInfo = {
         views: "6K+",
       },
       {
-        title: "10 Trending Node.js Libraries and Frameworks to Boost Your Web Development",
+        title:
+          "10 Trending Node.js Libraries and Frameworks to Boost Your Web Development",
         platform: "Dev.to",
         date: "2024",
         url: "https://dev.to/rahulladumor/10-trending-nodejs-libraries-and-frameworks-to-boost-your-web-development-3aa5",
         views: "15K+",
       },
       {
-        title: "A Deep Dive into .then() Method in JavaScript: How to Use it Like a Pro",
+        title:
+          "A Deep Dive into .then() Method in JavaScript: How to Use it Like a Pro",
         platform: "Dev.to",
         date: "2024",
         url: "https://dev.to/thetechguruworld/the-power-of-then-in-javascript-8ma",
@@ -1501,35 +1512,35 @@ const personalInfo = {
       },
     ],
     subjectOptions: [
-        {
-            value: "aws-consulting",
-            label: "AWS Consulting Services"
-        },
-        {
-            value: "cost-optimization",
-            label: "AWS Cost Optimization Inquiry"
-        },
-        {
-            value: "mentorship",
-            label: "Career Mentorship Interest"
-        },
-        {
-            value: "enterprise-consulting",
-            label: "Enterprise Consulting"
-        },
-        {
-            value: "speaking-engagement",
-            label: "Speaking Engagement"
-        },
-        {
-            value: "partnership",
-            label: "Partnership Opportunity"
-        },
-        {
-            value: "other",
-            label: "Other"
-        }
-    ]
+      {
+        value: "aws-consulting",
+        label: "AWS Consulting Services",
+      },
+      {
+        value: "cost-optimization",
+        label: "AWS Cost Optimization Inquiry",
+      },
+      {
+        value: "mentorship",
+        label: "Career Mentorship Interest",
+      },
+      {
+        value: "enterprise-consulting",
+        label: "Enterprise Consulting",
+      },
+      {
+        value: "speaking-engagement",
+        label: "Speaking Engagement",
+      },
+      {
+        value: "partnership",
+        label: "Partnership Opportunity",
+      },
+      {
+        value: "other",
+        label: "Other",
+      },
+    ],
   },
 };
 
@@ -1553,29 +1564,30 @@ module.exports = {
     languages: personalInfo.languages,
     availability: personalInfo.availability,
     achievements: personalInfo.achievements,
+    mainHeading: personalInfo.mainHeading,
   },
-  
+
   // Skills
   skills: personalInfo.skills,
-  
+
   // Certifications
   certifications: personalInfo.certifications,
-  
+
   // Education
   education: personalInfo.education,
-  
+
   // Services
   services: personalInfo.services,
-  
+
   // Work Experience
   workExperience: personalInfo.workExperience,
-  
+
   // Testimonials
   testimonials: personalInfo.testimonials,
-  
+
   // Case Studies
   caseStudies: personalInfo.caseStudies,
-  
+
   // Section Data
   problemSection: personalInfo.problemSection,
   solutionSection: personalInfo.solutionSection,
@@ -1584,7 +1596,7 @@ module.exports = {
   testimonialsSection: personalInfo.testimonialsSection,
   caseStudiesSection: personalInfo.caseStudiesSection,
   aboutSection: personalInfo.aboutSection,
-  
+
   // Additional Information
   additionalInfo: personalInfo.additionalInfo,
 };
