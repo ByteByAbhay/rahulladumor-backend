@@ -155,6 +155,7 @@ const routes = [
 const apiRouter = express.Router();
 routes.forEach(({ path, router, name }) => {
   apiRouter.use(path, router);
+  console.log("test - cicd")
   console.log(`✓ Registered route: /api${name ? `/${name}` : path}`);
 });
 
