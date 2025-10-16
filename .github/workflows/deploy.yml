@@ -1,0 +1,99 @@
+name: Deploy Backend to EC2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1️⃣ Configure AWS credentials (optional if you use S3 or AWS CLI)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 2️⃣ Setup SSH
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+
+      # 3️⃣ Add EC2 host to known_hosts
+      - name: Add EC2 host to known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      # 4️⃣ Test SSH connection
+      - name: Test SSH Connection
+        run: ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo SSH connection successful"
+
+      # 5️⃣ Create .env file directly on EC2
+      - name: Create Environment File on EC2
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+          BACKEND_NODE_ENV: ${{ secrets.BACKEND_NODE_ENV }}
+          BACKEND_MONGODB_URI: ${{ secrets.BACKEND_MONGODB_URI }}
+          BACKEND_DB_NAME: ${{ secrets.BACKEND_DB_NAME }}
+          BACKEND_JWT_SECRET: ${{ secrets.BACKEND_JWT_SECRET }}
+          BACKEND_JWT_EXPIRES_IN: ${{ secrets.BACKEND_JWT_EXPIRES_IN }}
+          BACKEND_EMAIL_USER: ${{ secrets.BACKEND_EMAIL_USER }}
+          BACKEND_EMAIL_PASS: ${{ secrets.BACKEND_EMAIL_PASS }}
+          BACKEND_EMAIL_FROM: ${{ secrets.BACKEND_EMAIL_FROM }}
+          BACKEND_ADMIN_EMAIL: ${{ secrets.BACKEND_ADMIN_EMAIL }}
+          BACKEND_DEV_COMMUNITY_API_KEY: ${{ secrets.BACKEND_DEV_COMMUNITY_API_KEY }}
+        run: |
+          # Create backend .env
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "cat > $DEPLOY_PATH/rahulladumor-backend/.env" << EOF
+          PORT=$BACKEND_PORT
+          NODE_ENV=$BACKEND_NODE_ENV
+          MONGODB_URI=$BACKEND_MONGODB_URI
+          DB_NAME=$BACKEND_DB_NAME
+          EMAIL_USER=$BACKEND_EMAIL_USER
+          EMAIL_PASS=$BACKEND_EMAIL_PASS
+          EMAIL_FROM=$BACKEND_EMAIL_FROM
+          ADMIN_EMAIL=$BACKEND_ADMIN_EMAIL
+          JWT_SECRET=$BACKEND_JWT_SECRET
+          JWT_EXPIRES_IN=$BACKEND_JWT_EXPIRES_IN
+          DEV_COMMUNITY_API_KEY=$BACKEND_DEV_COMMUNITY_API_KEY
+          EOF
+
+          echo "✅ Environment file created successfully on EC2"
+
+      # 6️⃣ Deploy to EC2
+      - name: Pull latest code and restart backend service
+        run: |
+          ssh -o StrictHostKeyChecking=no -t ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'ENDSSH'
+            set -e
+
+            echo "🚀 Starting backend deployment..."
+            cd ${{ secrets.DEPLOY_PATH }}/rahulladumor-backend
+
+            # Pull latest code
+            OLD_HASH=$(git rev-parse HEAD)
+            git fetch origin
+            git reset --hard origin/main
+            NEW_HASH=$(git rev-parse HEAD)
+
+            if [ "$OLD_HASH" != "$NEW_HASH" ]; then
+              echo "Code updated. Installing dependencies..."
+
+              # Install dependencies
+              npm install
+
+              # Restart PM2 process for backend
+              pm2 reload rahulladumor-backend --update-env || pm2 start server.js --name rahulladumor-backend
+              pm2 save
+
+              echo "✅ Backend deployment completed successfully!"
+            else
+              echo "No changes detected. Skipping deployment."
+            fi
+          ENDSSH
