@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rahul Ladumor Portfolio API - Auth Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .auth-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="password"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button.logout {
+            background-color: #dc3545;
+        }
+        button.logout:hover {
+            background-color: #c82333;
+        }
+        .response {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .token-display {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Rahul Ladumor Portfolio API - Authentication Demo</h1>
+        
+        <!-- Login Section -->
+        <div class="auth-section">
+            <h2>Login</h2>
+            <div class="form-group">
+                <label for="loginIdentifier">Username or Email:</label>
+                <input type="text" id="loginIdentifier" value="admin" placeholder="Enter username or email">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" value="admin123" placeholder="Enter password">
+            </div>
+            <button onclick="login()">Login</button>
+            <div id="loginResponse" class="response hidden"></div>
+        </div>
+
+        <!-- Token Display -->
+        <div id="tokenSection" class="auth-section hidden">
+            <h2>JWT Token</h2>
+            <div id="tokenDisplay" class="token-display"></div>
+            <button onclick="copyToken()">Copy Token</button>
+        </div>
+
+        <!-- Protected Actions -->
+        <div id="protectedSection" class="auth-section hidden">
+            <h2>Protected Actions</h2>
+            <button onclick="getProfile()">Get My Profile</button>
+            <button onclick="testProtectedRoute()">Test Protected Route</button>
+            <button class="logout" onclick="logout()">Logout</button>
+            <div id="protectedResponse" class="response hidden"></div>
+        </div>
+
+        <!-- Auto Logout Demo -->
+        <div id="autoLogoutSection" class="auth-section hidden">
+            <h2>Auto Logout Demo</h2>
+            <p>This section demonstrates automatic logout functionality:</p>
+            <button onclick="startAutoLogoutTimer()">Start 30s Auto Logout Timer</button>
+            <button onclick="cancelAutoLogout()">Cancel Auto Logout</button>
+            <div id="autoLogoutStatus" class="info response">Auto logout not active</div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = localStorage.getItem('authToken');
+        let autoLogoutTimer = null;
+        const API_BASE = window.location.origin;
+
+        // Initialize UI based on token presence
+        updateUI();
+
+        function updateUI() {
+            const isLoggedIn = !!authToken;
+            
+            document.getElementById('tokenSection').classList.toggle('hidden', !isLoggedIn);
+            document.getElementById('protectedSection').classList.toggle('hidden', !isLoggedIn);
+            document.getElementById('autoLogoutSection').classList.toggle('hidden', !isLoggedIn);
+            
+            if (isLoggedIn) {
+                document.getElementById('tokenDisplay').textContent = authToken;
+            }
+        }
+
+        async function login() {
+            const identifier = document.getElementById('loginIdentifier').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ identifier, password })
+                });
+                
+                const data = await response.json();
+                const responseDiv = document.getElementById('loginResponse');
+                responseDiv.classList.remove('hidden');
+                
+                if (response.ok) {
+                    authToken = data.data.token;
+                    localStorage.setItem('authToken', authToken);
+                    responseDiv.className = 'response success';
+                    responseDiv.textContent = JSON.stringify(data, null, 2);
+                    updateUI();
+                } else {
+                    responseDiv.className = 'response error';
+                    responseDiv.textContent = JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                const responseDiv = document.getElementById('loginResponse');
+                responseDiv.classList.remove('hidden');
+                responseDiv.className = 'response error';
+                responseDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/logout`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                // Clear token regardless of response
+                performLogout();
+                
+                const responseDiv = document.getElementById('protectedResponse');
+                responseDiv.classList.remove('hidden');
+                responseDiv.className = 'response success';
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+                
+            } catch (error) {
+                // Still perform logout even if API call fails
+                performLogout();
+                
+                const responseDiv = document.getElementById('protectedResponse');
+                responseDiv.classList.remove('hidden');
+                responseDiv.className = 'response error';
+                responseDiv.textContent = 'Logged out locally. Error: ' + error.message;
+            }
+        }
+
+        function performLogout() {
+            authToken = null;
+            localStorage.removeItem('authToken');
+            cancelAutoLogout();
+            updateUI();
+            
+            // Clear all response divs
+            document.querySelectorAll('.response').forEach(div => {
+                div.classList.add('hidden');
+            });
+        }
+
+        async function getProfile() {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                const responseDiv = document.getElementById('protectedResponse');
+                responseDiv.classList.remove('hidden');
+                
+                if (response.ok) {
+                    responseDiv.className = 'response success';
+                } else {
+                    responseDiv.className = 'response error';
+                    if (response.status === 401) {
+                        performLogout();
+                    }
+                }
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+                
+            } catch (error) {
+                const responseDiv = document.getElementById('protectedResponse');
+                responseDiv.classList.remove('hidden');
+                responseDiv.className = 'response error';
+                responseDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testProtectedRoute() {
+            try {
+                const response = await fetch(`${API_BASE}/api/personal-info`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                const responseDiv = document.getElementById('protectedResponse');
+                responseDiv.classList.remove('hidden');
+                
+                if (response.ok) {
+                    responseDiv.className = 'response success';
+                } else {
+                    responseDiv.className = 'response error';
+                    if (response.status === 401) {
+                        performLogout();
+                    }
+                }
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+                
+            } catch (error) {
+                const responseDiv = document.getElementById('protectedResponse');
+                responseDiv.classList.remove('hidden');
+                responseDiv.className = 'response error';
+                responseDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        function copyToken() {
+            navigator.clipboard.writeText(authToken).then(() => {
+                alert('Token copied to clipboard!');
+            });
+        }
+
+        function startAutoLogoutTimer() {
+            cancelAutoLogout(); // Cancel any existing timer
+            
+            let timeLeft = 30;
+            const statusDiv = document.getElementById('autoLogoutStatus');
+            
+            autoLogoutTimer = setInterval(() => {
+                timeLeft--;
+                statusDiv.textContent = `Auto logout in ${timeLeft} seconds...`;
+                
+                if (timeLeft <= 0) {
+                    statusDiv.textContent = 'Auto logout triggered!';
+                    performLogout();
+                    alert('You have been automatically logged out due to inactivity.');
+                }
+            }, 1000);
+            
+            statusDiv.textContent = `Auto logout in ${timeLeft} seconds...`;
+        }
+
+        function cancelAutoLogout() {
+            if (autoLogoutTimer) {
+                clearInterval(autoLogoutTimer);
+                autoLogoutTimer = null;
+                document.getElementById('autoLogoutStatus').textContent = 'Auto logout cancelled';
+            }
+        }
+
+        // Auto logout on token expiration (check every minute)
+        setInterval(() => {
+            if (authToken) {
+                try {
+                    const payload = JSON.parse(atob(authToken.split('.')[1]));
+                    const currentTime = Math.floor(Date.now() / 1000);
+                    
+                    if (payload.exp && payload.exp < currentTime) {
+                        alert('Your session has expired. Please login again.');
+                        performLogout();
+                    }
+                } catch (error) {
+                    console.error('Error checking token expiration:', error);
+                }
+            }
+        }, 60000); // Check every minute
+    </script>
+</body>
+</html>
