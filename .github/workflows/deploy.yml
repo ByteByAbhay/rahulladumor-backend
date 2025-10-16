@@ -89,7 +89,7 @@ jobs:
               npm install
 
               # Restart PM2 process for backend
-              pm2 reload rahulladumor-backend --update-env || pm2 start server.js --name rahulladumor-backend
+              pm2 reload backend --update-env ||   
               pm2 save
 
               echo "✅ Backend deployment completed successfully!"
