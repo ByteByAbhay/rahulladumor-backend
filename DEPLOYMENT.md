@@ -2,7 +2,7 @@
 
 ## Render Deployment Configuration
 
-This backend is configured to deploy on Render at: https://rahulladumor-backend.onrender.com/
+This backend is configured to deploy on Render at: https://api.acloudwithrahul.in/
 
 ### Environment Variables on Render
 
@@ -17,7 +17,7 @@ Make sure to set the following environment variables in your Render dashboard:
 ### Swagger Documentation
 
 The API documentation is available at:
-- **Production**: https://rahulladumor-backend.onrender.com/api-docs
+- **Production**: https://api.acloudwithrahul.in/api-docs
 - **Local**: http://localhost:3002/api-docs
 
 ### CORS Configuration
@@ -26,7 +26,7 @@ The backend is configured with the following CORS settings:
 
 1. **Allowed Origins**: 
    - All localhost ports (in development)
-   - https://rahulladumor-backend.onrender.com
+   - https://api.acloudwithrahul.in
    - All *.onrender.com domains
    - Add your frontend URL to the `allowedOrigins` array in `src/app.js`
 
@@ -45,15 +45,15 @@ If you encounter CORS errors:
    const allowedOrigins = [
      'http://localhost:3000',
      'https://your-frontend.com', // Add your frontend URL here
-     'https://rahulladumor-backend.onrender.com',
+     'https://api.acloudwithrahul.in',
    ];
    ```
 
 ### Testing the Deployment
 
-1. **Health Check**: https://rahulladumor-backend.onrender.com/health
-2. **API Documentation**: https://rahulladumor-backend.onrender.com/api-docs
-3. **Root Endpoint**: https://rahulladumor-backend.onrender.com/
+1. **Health Check**: https://api.acloudwithrahul.in/health
+2. **API Documentation**: https://api.acloudwithrahul.in/api-docs
+3. **Root Endpoint**: https://api.acloudwithrahul.in/
 
 ### Build Command
 

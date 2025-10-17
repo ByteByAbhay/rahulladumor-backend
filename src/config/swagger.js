@@ -7,12 +7,12 @@ const servers = [];
 // Add production server if available
 if (process.env.RENDER_EXTERNAL_URL) {
   servers.push({
-    url: `https://${process.env.RENDER_EXTERNAL_HOSTNAME || 'rahulladumor-backend.onrender.com'}`,
+    url: `https://${process.env.RENDER_EXTERNAL_HOSTNAME || 'api.acloudwithrahul.in'}`,
     description: 'Production server',
   });
 } else if (process.env.NODE_ENV === 'production') {
   servers.push({
-    url: 'https://rahulladumor-backend.onrender.com',
+    url: 'https://api.acloudwithrahul.in',
     description: 'Production server',
   });
 }
