@@ -27,6 +27,7 @@ const additionalInfoRoutes = require("./routes/additionalInfo.routes");
 const educationRoutes = require("./routes/education.routes");
 const bulkUpdateRoutes = require("./routes/bulkUpdate.routes");
 const articlesRoutes = require("./routes/articles.routes");
+const deploymentRoutes = require("./routes/deployment.routes");
 
 const app = express();
 
@@ -149,6 +150,7 @@ const routes = [
   { path: "/section-data", router: sectionDataRoutes },
   { path: "/additional-info", router: additionalInfoRoutes },
   { path: "/bulk-update", router: bulkUpdateRoutes },
+  { path: "/deployment", router: deploymentRoutes },
 ];
 
 // Register all routes under /api prefix

@@ -49,6 +49,10 @@ jobs:
           BACKEND_EMAIL_FROM: ${{ secrets.BACKEND_EMAIL_FROM }}
           BACKEND_ADMIN_EMAIL: ${{ secrets.BACKEND_ADMIN_EMAIL }}
           BACKEND_DEV_COMMUNITY_API_KEY: ${{ secrets.BACKEND_DEV_COMMUNITY_API_KEY }}
+          BACKEND_GITHUB_TOKEN: ${{ secrets.BACKEND_GITHUB_TOKEN }}
+          BACKEND_GITHUB_OWNER: ${{ secrets.BACKEND_GITHUB_OWNER }}
+          BACKEND_GITHUB_REPO: ${{ secrets.BACKEND_GITHUB_REPO }}
+          BACKEND_WORKFLOW_FILE: ${{ secrets.BACKEND_WORKFLOW_FILE }}
         run: |
           # Create backend .env
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "cat > $DEPLOY_PATH/rahulladumor-backend/.env" << EOF
@@ -63,6 +67,10 @@ jobs:
           JWT_SECRET=$BACKEND_JWT_SECRET
           JWT_EXPIRES_IN=$BACKEND_JWT_EXPIRES_IN
           DEV_COMMUNITY_API_KEY=$BACKEND_DEV_COMMUNITY_API_KEY
+          GITHUB_TOKEN=$BACKEND_GITHUB_TOKEN
+          GITHUB_OWNER=$BACKEND_GITHUB_OWNER
+          GITHUB_REPO=$BACKEND_GITHUB_REPO
+          WORKFLOW_FILE=$BACKEND_WORKFLOW_FILE
           EOF
 
           echo "✅ Environment file created successfully on EC2"
