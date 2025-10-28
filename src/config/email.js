@@ -1,11 +1,13 @@
 const nodemailer = require("nodemailer");
 
-// Email configuration
+// Email configuration - Hostinger SMTP
 const emailConfig = {
-  service: "gmail", // You can change this to your preferred email service
+  host: process.env.SMTP_HOST || "smtp.hostinger.com",
+  port: parseInt(process.env.SMTP_PORT) || 465,
+  secure: true, // true for SSL (port 465), false for TLS/STARTTLS (port 587)
   auth: {
-    user: process.env.EMAIL_USER || "coderninjatech@gmail.com",
-    pass: process.env.EMAIL_PASS || "nnat egfc xzwz kqty",
+    user: process.env.EMAIL_USER || "your-email@yourdomain.com",
+    pass: process.env.EMAIL_PASS || "your-email-password",
   },
 };
 

@@ -7,7 +7,7 @@ const personalInfo = {
     "30-70% Cost Reduction Specialist | DevOps & CI/CD Automation | Helping Enterprises Scale with Lambda & Kubernetes",
   location: "Surat, Gujarat, India",
   timezone: "GMT+5:30",
-  image: "/assets/images/profile.avif",
+  image: "https://d3r07edv7sh3j9.cloudfront.net/images/profile.avif",
 
   // Contact Information
   email: "contact@acloudwithrahul.in",
