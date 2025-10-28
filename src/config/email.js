@@ -217,7 +217,7 @@ const emailTemplates = {
               <div class="footer">
                   <div class="footer-text">
                       <strong>Rahul Ladumor</strong><br>
-                      3x AWS Certified Full-Stack JavaScript & Cloud Engineer<br>
+                      4x AWS Community Builder (Serverless) | Serverless Expert | LLM | AI ML<br>
                       Email: contact@acloudwithrahul.in<br>
                       Website: https://www.rahulladumor.in
                   </div>
@@ -421,7 +421,7 @@ const emailTemplates = {
           <div class="email-container">
               <div class="header">
                   <h1>New Contact Form Submission</h1>
-                  <p>AWS Cloud Consulting & Mentorship</p>
+                  <p>Serverless Expert | AWS Community Builder | LLM & AI ML</p>
               </div>
               
               <div class="content">
